@@ -13,8 +13,12 @@ function App() {
   });
 
   const [mensaje, setMensaje] = useState("");
-
-  function registrarDonante(evento) {
+    const [busqueda, setBusqueda] = useState("");
+  const donantesFiltrados = donantes.filter((donante) => {
+  const texto = busqueda.trim().toLowerCase();
+  return `${donante.nombre} ${donante.id}`.toLowerCase().includes(texto);
+});
+    function registrarDonante(evento) {
     evento.preventDefault();
 
     const formulario = evento.currentTarget;
@@ -137,6 +141,14 @@ function App() {
           <p>Todavía no hay donantes registrados.</p>
         ) : (
           <div className="tabla-contenedor">
+            <label htmlFor="buscar-donante">Buscar por nombre o ID</label>
+<input
+  id="buscar-donante"
+  type="search"
+  value={busqueda}
+  onChange={(evento) => setBusqueda(evento.target.value)}
+  placeholder="Escribe un nombre o ID"
+/>
             <table>
               <thead>
                 <tr>
@@ -153,7 +165,7 @@ function App() {
               </thead>
 
               <tbody>
-                {donantes.map((donante) => (
+                {donantesFiltrados.map((donante) => (
                   <tr key={donante.id}>
                     <td>{donante.id}</td>
                     <td>{donante.nombre}</td>
